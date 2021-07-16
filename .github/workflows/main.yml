@@ -1,4 +1,4 @@
-name: hasbi
+name: zyen
 
 on: workflow_dispatch
 
@@ -8,22 +8,17 @@ jobs:
 
     runs-on: windows-latest
 
-    timeout-minutes: 9999999999999999999999999999999999999999999999
+    timeout-minutes: 9999999999999999999999
 
     steps:
 
     - name: Download
 
       run: |
-
         Invoke-WebRequest https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-windows-amd64.zip -OutFile ngrok.zip
-
         Invoke-WebRequest https://raw.githubusercontent.com/zzlastgame/zyenRDP/main/credentials.bat -OutFile credentials.bat
-
         Invoke-WebRequest https://raw.githubusercontent.com/maudyewe/kuda/main/pelun.jpg -OutFile wallpaper.bmp
-
         Invoke-WebRequest https://raw.githubusercontent.com/zzlastgame/zyenRDP/main/wp.bat -OutFile wallpaper.bat
-
     - name: Extract
 
       run: Expand-Archive ngrok.zip
@@ -43,17 +38,11 @@ jobs:
     - name: Enable TS
 
       run: | 
-
         Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server'-name "fDenyTSConnections" -Value 0
-
         Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
-
         Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' -name "UserAuthentication" -Value 1
-
         copy wallpaper.bmp D:\a\wallpaper.bmp
-
         copy wallpaper.bat D:\a\wallpaper.bat
-
     - name: Create Tunnel
 
       run: Start-Process Powershell -ArgumentList '-Noexit -Command ".\ngrok\ngrok.exe tcp 3389"'
@@ -69,7 +58,5 @@ jobs:
     - name: Done
 
       run: | 
-
         Invoke-WebRequest https://raw.githubusercontent.com/zzlastgame/zyenRDP/main/wewe.ps1 -OutFile loop.ps1
-
         ./loop.ps1
